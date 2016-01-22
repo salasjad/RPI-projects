@@ -34,14 +34,6 @@ distance = round(distance, 2)
 
 print ("Distance:" , distance, " cm")
 
-data = {
-        ["container":1,"value":distance]
-}
-
-req = urllib2.Request('http://waste-master.herokuapp.com/api/readings/')
-req.add_header('Content-Type', 'application/json')
-
-respons = urllib2.urlopen(req, json.dumps(data))
 
 GPIO.cleanup()
 
