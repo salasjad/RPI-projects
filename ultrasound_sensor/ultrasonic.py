@@ -34,7 +34,7 @@ distance = pulse_duration * 17150
 distance = round(distance, 2)
 print ("Distance:" , distance, " cm")
 url = 'http://waste-master.herokuapp.com/api/readings/'
-payload = {"container":1,"value": 4120}
+payload = {"container":1,"value": int(distance)}
 headers = {'content-type': 'application/json'}
 
 response = requests.post(url, data=json.dumps(payload), headers=headers)
