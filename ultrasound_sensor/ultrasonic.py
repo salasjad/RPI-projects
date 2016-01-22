@@ -1,3 +1,5 @@
+import json
+import urllib2
 import RPi.GPIO as GPIO
 import time
 GPIO.setmode(GPIO.BCM)
@@ -13,7 +15,6 @@ GPIO.setup(ECHO, GPIO.IN)
 GPIO.output(TRIG, False)
 
 print ("Waiting for sensor")
-time.sleep(2)
 
 GPIO.output(TRIG, True)
 time.sleep(0.00001)
@@ -32,6 +33,7 @@ distance = pulse_duration * 17150
 distance = round(distance, 2)
 
 print ("Distance:" , distance, " cm")
+
 
 GPIO.cleanup()
 
