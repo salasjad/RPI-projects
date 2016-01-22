@@ -6,9 +6,13 @@ int main(){
 
    pinMode(ledPin, OUTPUT);
 
-   
-   digitalWrite(ledPin, HIGH);
-
+   while(1){
+      
+      digitalWrite(ledPin, HIGH);
+      delay(1000);
+      digitalWrite(ledPin, LOW);
+      delay(1000);
+   }
 
 return 0;
 }
