@@ -1,0 +1,18 @@
+aspbian Wheezy
+The RPi.GPIO module is installed by default in Raspbian. To make sure that it is at the latest version:
+$ sudo apt-get update
+$ sudo apt-get install python-rpi.gpio python3-rpi.gpio
+To install the latest development version from the project source code library:
+$ sudo apt-get install python-dev python3-dev
+$ sudo apt-get install mercurial
+$ sudo apt-get install python-pip python3-pip
+$ sudo apt-get remove python-rpi.gpio python3-rpi.gpio
+$ sudo pip install hg+http://hg.code.sf.net/p/raspberry-gpio-python/code#egg=RPi.GPIO
+$ sudo pip-3.2 install hg+http://hg.code.sf.net/p/raspberry-gpio-python/code#egg=RPi.GPIO
+To revert back to the default version in Raspbian:
+$ sudo pip uninstall RPi.GPIO
+$ sudo pip-3.2 uninstall RPi.GPIO
+$ sudo apt-get install python-rpi.gpio python3-rpi.gpio
+Other Distributions
+It is recommended that you install RPi.GPIO using the pip utility as superuser (root):
+# pip install RPi.GPIO
