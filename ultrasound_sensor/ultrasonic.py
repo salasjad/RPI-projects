@@ -34,6 +34,12 @@ distance = round(distance, 2)
 
 print ("Distance:" , distance, " cm")
 
+url = 'http://waste-master.herokuapp.com/api/readings/'
+# payload = {'some': 'data'}
+payload = [{"container":1,"value":124}]
+headers = {'content-type': 'application/json'}
+
+response = requests.post(url, data=json.dumps(payload), headers=headers)
 
 GPIO.cleanup()
 
