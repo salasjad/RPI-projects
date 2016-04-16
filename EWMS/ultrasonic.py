@@ -42,3 +42,7 @@ response = requests.post(url, data=json.dumps(payload), headers=headers)
 
 GPIO.cleanup()
 
+
+
+
+
