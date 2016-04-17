@@ -15,32 +15,29 @@ GPIO.setup(ECHO, GPIO.IN)
 GPIO.output(TRIG, False)
 
 print ("Waiting for sensor")
-time.sleep(2)
+#time.sleep(2)
 
-GPIO.output(TRIG, True)
-time.sleep(0.00001)
-GPIO.output(TRIG, False)
+while true:
+    GPIO.output(TRIG, True)
+    time.sleep(0.00001)
+    GPIO.output(TRIG, False)
 
-while GPIO.input(ECHO)== 0:
+    while GPIO.input(ECHO)== 0:
 	pulse_start = time.time()
 
-while GPIO.input(ECHO)==1:
+    while GPIO.input(ECHO)==1:
 	pulse_end = time.time()
 
-pulse_duration = pulse_end - pulse_start
+    pulse_duration = pulse_end - pulse_start
 
-distance = pulse_duration * 17150
+    distance = pulse_duration * 17150
 
-distance = round(distance, 2)
-print ("Distance:" , distance, " cm")
+    distance = round(distance, 2)
+    #print ("Distance:" , distance, " cm")
 
-url = 'http://waste-master.herokuapp.com/api/readings/'
-payload = {"container":1,"value": int(distance)}
-headers = {'content-type': 'application/json'}
+    GPIO.cleanup()
 
-response = requests.post(url, data=json.dumps(payload), headers=headers)
-
-GPIO.cleanup()
+    time.sleep(10)
 
 
 
