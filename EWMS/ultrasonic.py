@@ -35,7 +35,7 @@ try:
         distance = pulse_duration * 17150
         distance = round(distance, 2)
         print ("Distance:" , distance, " cm")
-        publish.single("ewms", distance, hostname="10.0.0.129")
+        publish.single("ewms/container1", distance, hostname="10.0.0.129")
         
         time.sleep(2)
 
