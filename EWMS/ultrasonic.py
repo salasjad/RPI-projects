@@ -6,15 +6,16 @@ GPIO.setmode(GPIO.BCM)
 TOPIC = "ewms/container1"
 HOSTNAME = "10.0.0.129"
 
+def publish_mqtt(message):
+    print("Distance:", message, " cm")
+    publish.single(TOPIC, message, HOSTNAME)
+
+
 TRIG1 = 23 #gul
 ECHO1 = 24 #gronn
 TRIG2 = 20 #oransje
 ECHO2 = 21 #brun
 print ("Distance Measurement In Progress")
-
-def publish_mqtt(message):
-    print("Distance:", message, " cm")
-    publish.single(TOPIC, message, HOSTNAME)
 
 try:   
     GPIO.setup(TRIG1, GPIO.OUT)
