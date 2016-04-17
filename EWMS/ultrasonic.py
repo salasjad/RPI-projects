@@ -1,5 +1,6 @@
 try:
     import RPi.GPIO as GPIO
+    import paho.mqtt.publish as publish
     import time
     GPIO.setmode(GPIO.BCM)
     
@@ -34,6 +35,7 @@ try:
         distance = pulse_duration * 17150
         distance = round(distance, 2)
         print ("Distance:" , distance, " cm")
+        publish.single("ewms", distance, hostname="10.0.0.129")
         
         time.sleep(2)
 
