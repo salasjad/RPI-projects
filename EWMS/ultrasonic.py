@@ -1,6 +1,4 @@
 try:
-    import json
-    import requests
     import RPi.GPIO as GPIO
     import time
     GPIO.setmode(GPIO.BCM)
@@ -12,10 +10,10 @@ try:
     
     GPIO.setup(TRIG, GPIO.OUT)
     GPIO.setup(ECHO, GPIO.IN)
-    
-    GPIO.output(TRIG, False)
+
+    #GPIO.output(TRIG, False)
     print ("Waiting for sensor")
-    #time.sleep(2)
+    #time.sleep(1)
     
     while True:
         GPIO.output(TRIG, True)
@@ -28,17 +26,16 @@ try:
         while GPIO.input(ECHO)==1:
             pulse_end = time.time()
             
-        pulse_duration = pulse_end - pulse_start
+        try:
+		pulse_duration = pulse_end - pulse_start
+	except NameError:
+		pulse_duration = 0
+
         distance = pulse_duration * 17150
         distance = round(distance, 2)
-        #print ("Distance:" , distance, " cm")
+        print ("Distance:" , distance, " cm")
         
-        time.sleep(10)
+        time.sleep(2)
 
 except KeyboardInterrupt:
     GPIO.cleanup()
-
-
-
-
-
