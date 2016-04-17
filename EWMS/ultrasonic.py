@@ -1,18 +1,22 @@
-try:
-    import RPi.GPIO as GPIO
-    import paho.mqtt.publish as publish
-    import time
-    GPIO.setmode(GPIO.BCM)
+import RPi.GPIO as GPIO
+import paho.mqtt.publish as publish
+import time
+GPIO.setmode(GPIO.BCM)
     
-    TOPIC = "ewms/container1"
-    HOSTNAME = "10.0.0.129"
+TOPIC = "ewms/container1"
+HOSTNAME = "10.0.0.129"
 
-    TRIG1 = 23 #gul
-    ECHO1 = 24 #grønn
-    TRIG2 = 20 #oransje
-    ECHO2 = 21 #brun
-    print ("Distance Measurement In Progress")
-    
+TRIG1 = 23 #gul
+ECHO1 = 24 #gronn
+TRIG2 = 20 #oransje
+ECHO2 = 21 #brun
+print ("Distance Measurement In Progress")
+
+def publish_mqtt(message):
+    print("Distance:", message, " cm")
+    publish.single(TOPIC, message, HOSTNAME)
+
+try:   
     GPIO.setup(TRIG1, GPIO.OUT)
     GPIO.setup(TRIG2, GPIO.OUT)
     GPIO.setup(ECHO1, GPIO.IN)
@@ -52,6 +56,3 @@ try:
 except KeyboardInterrupt:
     GPIO.cleanup()
 
-def publish_mqtt(message):
-    print("Distance:", message, " cm")
-    publish.single(TOPIC, message, HOSTNAME)
