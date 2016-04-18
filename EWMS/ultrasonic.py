@@ -11,9 +11,9 @@ ECHO1 = 24 #gronn
 TRIG2 = 20 #oransje
 ECHO2 = 21 #brun
 
-def publish_mqtt(message):
+def send_update(message):
     print("Distance:", message, " cm")
-    publish.single(TOPIC, "fdfsf", HOSTNAME)
+    publish.single(TOPIC, message, hostname=HOSTNAME)
 
 try:   
     GPIO.setup(TRIG1, GPIO.OUT)
@@ -46,9 +46,7 @@ try:
 
         distance = pulse_duration * 17150
         distance = round(distance, 2)
-        print ("Distance:" , distance, " cm")
-        #publish.single("ewms/container1", distance, hostname="10.0.0.129")
-        publish_mqtt(distance)
+        send_update(distance)
         
         time.sleep(2)
 
