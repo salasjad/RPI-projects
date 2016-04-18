@@ -15,7 +15,7 @@ def publish_mqtt(message):
     print("Distance:", message, " cm")
     publish.single(TOPIC, message, HOSTNAME)
 
-def ultrasonic_read:
+def ultrasonic_read():
     try:   
         GPIO.setup(TRIG1, GPIO.OUT)
         GPIO.setup(TRIG2, GPIO.OUT)
@@ -53,6 +53,6 @@ def ultrasonic_read:
             
             time.sleep(2)
 
-except KeyboardInterrupt:
-    GPIO.cleanup()
+    except KeyboardInterrupt:
+        GPIO.cleanup()
 
