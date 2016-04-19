@@ -61,8 +61,8 @@ try:
         
         average1 = sensor_average(r_sensor1)
         average2 = sensor_average(r_sensor2)
-
         average = max(average1, average2)
+
         if average != prev_average:
             send_update(average)
             prev_average = average
