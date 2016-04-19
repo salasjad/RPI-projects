@@ -18,7 +18,8 @@ def send_update(message):
     publish.single(TOPIC, message, hostname=HOSTNAME)
 
 def sensor_average(r_sensor):
-    average = reduce(lambda x, y: x + y, r_sensor)/len(r_sensor)
+    #average = reduce(lambda x, y: x + y, r_sensor)/len(r_sensor)
+    average = sum(r_sensor)/len(r_sensor)
     return average
 
 try:   
