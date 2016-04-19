@@ -3,7 +3,7 @@ import paho.mqtt.publish as publish
 import time
 GPIO.setmode(GPIO.BCM)
     
-TOPIC = "ewms/container1"
+TOPIC = "ewms/1"
 HOSTNAME = "10.0.0.129"
 
 TRIG1 = 23 #gul
