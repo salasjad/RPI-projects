@@ -1,6 +1,8 @@
 import RPi.GPIO as GPIO
 import paho.mqtt.publish as publish
 import time
+import collections
+
 GPIO.setmode(GPIO.BCM)
     
 TOPIC = "ewms/1"
@@ -15,6 +17,10 @@ def send_update(message):
     print("Distance:", message, " cm")
     publish.single(TOPIC, message, hostname=HOSTNAME)
 
+def sensor_average(r_sensor):
+    average = reduce(lambda x, y: x + y, r_sensor)/len(r_sensor)
+    return average
+
 try:   
     GPIO.setup(TRIG1, GPIO.OUT)
     GPIO.setup(TRIG2, GPIO.OUT)
@@ -25,8 +31,14 @@ try:
     #GPIO.output(TRIG2, Flase)
     print ("Venter paa sensorene")
     #time.sleep(1)
-    
-    while True:
+   
+
+    prev_average = 0
+    while True: 
+
+        r_sensor1 = collections.deque(maxlen=10)
+        r_sensor2 = collections.deque(maxlen=10)
+
         GPIO.output(TRIG1, True)
         GPIO.output(TRIG2, True)
         time.sleep(0.00001)
@@ -46,7 +58,14 @@ try:
 
         distance = pulse_duration * 17150
         distance = round(distance, 2)
-        send_update(distance)
+        
+        average1 = sensor_average(r_sensor1)
+        average2 = sensor_average(r_sensor2)
+
+        average = max(average1, average2)
+        if average != prev_average:
+            send_update(average)
+            prev_average = average
         
         time.sleep(2)
 
