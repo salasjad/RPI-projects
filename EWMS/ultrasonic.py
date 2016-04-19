@@ -24,9 +24,9 @@ def sensor_average(r_sensor):
 
 try:   
     GPIO.setup(TRIG1, GPIO.OUT)
-    GPIO.setup(TRIG2, GPIO.OUT)
+    #GPIO.setup(TRIG2, GPIO.OUT)
     GPIO.setup(ECHO1, GPIO.IN)
-    GPIO.setup(ECHO2, GPIO.IN)
+    #GPIO.setup(ECHO2, GPIO.IN)
 
     #GPIO.output(TRIG1, False)
     #GPIO.output(TRIG2, Flase)
@@ -41,10 +41,10 @@ try:
         r_sensor2 = collections.deque(maxlen=10)
 
         GPIO.output(TRIG1, True)
-        GPIO.output(TRIG2, True)
+        #GPIO.output(TRIG2, True)
         time.sleep(0.00001)
         GPIO.output(TRIG1, False)
-        GPIO.output(TRIG2, False)
+        #GPIO.output(TRIG2, False)
         
         while GPIO.input(ECHO1)== 0:
             pulse_start1 = time.time()
@@ -52,32 +52,32 @@ try:
         while GPIO.input(ECHO1)==1:
             pulse_end1 = time.time()
         
-        while GPIO.input(ECHO2)== 0:
+        "while GPIO.input(ECHO2)== 0:
             pulse_start2 = time.time()
             
         while GPIO.input(ECHO2)==1:
             pulse_end2 = time.time()
-
+        "
         try:
                 pulse_duration1 = pulse_end1 - pulse_start1
-                pulse_duration2 = pulse_end2 - pulse_start2
+                #pulse_duration2 = pulse_end2 - pulse_start2
         except NameError:
-                #pulse_duration1 = 0
+                pulse_duration1 = 0
                 #pulse_duration2 = 0
 
         distance1 = pulse_duration1 * 17150
         distance1 = round(distance1, 2)
         
-        distance2 = pulse_duration2 * 17150
-        distance2 = round(distance2, 2)
+        "distance2 = pulse_duration2 * 17150
+        distance2 = round(distance2, 2) "
       
         print("Distance1: " + distance1)
-        print("Distance2: " + distance2)
 
         r_sensor1.append(distance1)
-        r_sensor2.append(distance2)
+        #r_sensor2.append(distance2)
         average1 = sensor_average(r_sensor1)
-        average2 = sensor_average(r_sensor2)
+        #average2 = sensor_average(r_sensor2)
+        average2 = 0 #FIXME fjern senere
         average = max(average1, average2)
 
         if average != prev_average:
