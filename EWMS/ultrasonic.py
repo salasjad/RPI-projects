@@ -35,11 +35,12 @@ try:
    
 
     prev_average = 0
+    r_sensor1 = collections.deque(maxlen=10)
+    r_sensor2 = collections.deque(maxlen=10)
+
     while True: 
 
-        r_sensor1 = collections.deque(maxlen=10)
-        r_sensor2 = collections.deque(maxlen=10)
-
+	print(len(r_sensor1))
         GPIO.output(TRIG1, True)
         #GPIO.output(TRIG2, True)
         time.sleep(0.00001)
@@ -52,12 +53,12 @@ try:
         while GPIO.input(ECHO1)==1:
             pulse_end1 = time.time()
         
-        "while GPIO.input(ECHO2)== 0:
+        '''while GPIO.input(ECHO2)== 0:
             pulse_start2 = time.time()
             
         while GPIO.input(ECHO2)==1:
             pulse_end2 = time.time()
-        "
+        '''
         try:
                 pulse_duration1 = pulse_end1 - pulse_start1
                 #pulse_duration2 = pulse_end2 - pulse_start2
@@ -68,10 +69,10 @@ try:
         distance1 = pulse_duration1 * 17150
         distance1 = round(distance1, 2)
         
-        "distance2 = pulse_duration2 * 17150
-        distance2 = round(distance2, 2) "
+        '''distance2 = pulse_duration2 * 17150
+        distance2 = round(distance2, 2) '''
       
-        print("Distance1: " + distance1)
+        #print("Distance1: " + distance1)
 
         r_sensor1.append(distance1)
         #r_sensor2.append(distance2)
