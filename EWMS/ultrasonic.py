@@ -70,7 +70,10 @@ try:
         
         distance2 = pulse_duration2 * 17150
         distance2 = round(distance2, 2)
-       
+      
+        print("Distance1: " + distance1)
+        print("Distance2: " + distance2)
+
         r_sensor1.append(distance1)
         r_sensor2.append(distance2)
         average1 = sensor_average(r_sensor1)
