@@ -14,7 +14,7 @@ TRIG2 = 20 #oransje
 ECHO2 = 21 #brun
 
 def send_update(message):
-    print("Distance:", message, " cm")
+    print("Average distance:", message, " cm")
     publish.single(TOPIC, message, hostname=HOSTNAME)
 
 def sensor_average(r_sensor):
@@ -39,8 +39,6 @@ try:
     r_sensor2 = collections.deque(maxlen=10)
 
     while True: 
-
-	print(len(r_sensor1))
         GPIO.output(TRIG1, True)
         #GPIO.output(TRIG2, True)
         time.sleep(0.00001)
@@ -72,20 +70,20 @@ try:
         '''distance2 = pulse_duration2 * 17150
         distance2 = round(distance2, 2) '''
       
-        #print("Distance1: " + distance1)
-
         r_sensor1.append(distance1)
         #r_sensor2.append(distance2)
         average1 = sensor_average(r_sensor1)
         #average2 = sensor_average(r_sensor2)
         average2 = 0 #FIXME fjern senere
-        average = max(average1, average2)
+        average = int(max(average1, average2))
 
-        if average != prev_average:
+	print average
+        if average>(prev_average+10) or average<(prev_average-10):
+	#if average != prev_average:
             send_update(average)
             prev_average = average
         
-        time.sleep(2)
+        time.sleep(0.5)
 
 except KeyboardInterrupt:
     GPIO.cleanup()
