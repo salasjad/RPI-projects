@@ -21,6 +21,26 @@ def sensor_average(r_sensor):
     average = sum(r_sensor)/len(r_sensor) if len(r_sensor) > 0 else 0
     return average
 
+def gpio_output(TRIG, ECHO):
+    GPIO.output(TRIG, True)
+    time.sleep(0.00001)
+    GPIO.output(TRIG, False)
+
+    while GPIO.input(ECHO)== 0:
+        pulse_start = time.time()
+		    
+    while GPIO.input(ECHO)==1:
+        pulse_end = time.time()
+
+    try:
+        pulse_duration = pulse_end - pulse_start
+    except NameError:
+        pulse_duration = 0
+
+    distance = pulse_duration * 17150
+    distance = round(distance, 2)
+    return distance
+
 try:   
     GPIO.setup(TRIG1, GPIO.OUT)
     GPIO.setup(TRIG2, GPIO.OUT)
@@ -32,48 +52,13 @@ try:
     print ("Venter paa sensorene")
     time.sleep(1)
    
-
     prev_average = 0
     r_sensor1 = collections.deque(maxlen=10)
     r_sensor2 = collections.deque(maxlen=10)
 
     while True: 
-        GPIO.output(TRIG1, True)
-        time.sleep(0.00001)
-        GPIO.output(TRIG1, False)
- 
-        while GPIO.input(ECHO1)== 0:
-            pulse_start1 = time.time()
-            
-        while GPIO.input(ECHO1)==1:
-            pulse_end1 = time.time()
-       
-        GPIO.output(TRIG2, True)
-        time.sleep(0.00001)
-        GPIO.output(TRIG2, False)
-
-	while GPIO.input(ECHO2)== 0:
-            pulse_start2 = time.time()
-            
-        while GPIO.input(ECHO2)==1:
-            pulse_end2 = time.time()
- 
-        
-        try:
-                pulse_duration1 = pulse_end1 - pulse_start1
-        except NameError:
-                pulse_duration1 = 0
-
-        try:
-                pulse_duration2 = pulse_end2 - pulse_start2
-        except NameError:
-                pulse_duration2 = 0 
-
-        distance1 = pulse_duration1 * 17150
-        distance1 = round(distance1, 2)
-        
-        distance2 = pulse_duration2 * 17150
-        distance2 = round(distance2, 2)
+	distance1 = gpio_output(TRIG1, ECHO1)
+        distance2 = gpio_output(TRIG2, ECHO2)
 
         r_sensor1.append(distance1)
         r_sensor2.append(distance2)
