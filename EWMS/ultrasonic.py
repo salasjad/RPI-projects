@@ -2,17 +2,29 @@ import RPi.GPIO as GPIO
 import paho.mqtt.publish as publish
 import time
 import collections
+import math
 
 GPIO.setmode(GPIO.BCM)
     
 TOPIC = "ewms/1"
 HOSTNAME = "10.0.0.129"
 
+#ULTRASONIC
 TRIG1 = 23 #gul
 ECHO1 = 24 #gronn
 TRIG2 = 20 #oransje
 ECHO2 = 21 #brun
 
+#RGB
+RED = 17
+GREEN = 18
+BLUE = 27
+
+def color(B, G, R): #R,G,B
+    RED_C.ChangeDutyCycle(R) 
+    GREEN_C.ChangeDutyCycle(G) 
+    BLUE_C.ChangeDutyCycle(B) 
+ 
 def send_update(message):
     print("Updated server with average:", message)
     publish.single(TOPIC, message, hostname=HOSTNAME)
@@ -42,10 +54,21 @@ def gpio_output(TRIG, ECHO):
     return distance
 
 try:   
+    GPIO.setup(RED, GPIO.OUT)
+    GPIO.setup(GREEN, GPIO.OUT)
+    GPIO.setup(BLUE, GPIO.OUT)
     GPIO.setup(TRIG1, GPIO.OUT)
     GPIO.setup(TRIG2, GPIO.OUT)
     GPIO.setup(ECHO1, GPIO.IN)
     GPIO.setup(ECHO2, GPIO.IN)
+
+    #initialize the RGB to off
+    RED_C = GPIO.PWM(RED, 100)
+    RED_C.start(0)
+    GREEN_C = GPIO.PWM(GREEN, 100)
+    GREEN_C.start(0)
+    BLUE_C = GPIO.PWM(BLUE, 100)
+    BLUE_C.start(0)
 
     GPIO.output(TRIG1, False)
     GPIO.output(TRIG2, False)
@@ -72,12 +95,11 @@ try:
 	print "Min average: ",average
 	print ""
         if average>(prev_average+10) or average<(prev_average-10):
-	#if average != prev_average:
             send_update(average)
             prev_average = average
-        
-        time.sleep(1)
+            color(100,0,0)
+        time.sleep(1)	
+	color(20,30,40)
 
 except KeyboardInterrupt:
     GPIO.cleanup()
-
