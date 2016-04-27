@@ -1,9 +1,10 @@
-from rtl_update import rtl_load
 import RPi.GPIO as GPIO
 import paho.mqtt.publish as publish
+import paho.mqtt.client as subscribe
 import time
 import collections
 import math
+import threading
 
 GPIO.setmode(GPIO.BCM)
     
@@ -54,8 +55,16 @@ def gpio_output(TRIG, ECHO):
     distance = round(distance, 2)
     return distance
 
+def rtl():
+    while True:
+        sensor1 = gpio_output(TRIG1, ECHO1)
+	sensor2 = gpio_output(TRIG2, ECHO2)
+	sensor = min(sensor1, sensor2)
+	#add a payload for subscriber here
+        print('RTL', sensor)
+        time.sleep(1)
+
 try:
-    rtl_check = rlt_load()
 
     GPIO.setup(RED, GPIO.OUT)
     GPIO.setup(GREEN, GPIO.OUT)
@@ -77,10 +86,13 @@ try:
     GPIO.output(TRIG2, False)
     print ("Venter paa sensorene")
     time.sleep(1)
-   
+
+    rtl_thread = threading.Thread(target=rtl)
+    rtl_thread.start()
+      
     prev_average = 0
-    r_sensor1 = collections.deque(maxlen=10)
-    r_sensor2 = collections.deque(maxlen=10)
+    r_sensor1 = collections.deque(maxlen=6)
+    r_sensor2 = collections.deque(maxlen=6)
 
     while True: 
 	distance1 = gpio_output(TRIG1, ECHO1)
@@ -90,7 +102,6 @@ try:
         r_sensor2.append(distance2)
         average1 = sensor_average(r_sensor1)
         average2 = sensor_average(r_sensor2)
-        #average2 = 0 #FIXME fjern senere
         average = int(min(average1, average2))
 		
 	print "Average1: ",average1
@@ -101,8 +112,10 @@ try:
             send_update(average)
             prev_average = average
             color(100,0,0)
-        time.sleep(1)	
+	    time.sleep(1)
 	color(20,30,40)
+        time.sleep(5)	
+
 
 except KeyboardInterrupt:
     GPIO.cleanup()
