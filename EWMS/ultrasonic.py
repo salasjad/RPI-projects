@@ -1,3 +1,4 @@
+from rtl_update import rtl_load
 import RPi.GPIO as GPIO
 import paho.mqtt.publish as publish
 import time
@@ -23,8 +24,8 @@ BLUE = 27
 def color(B, G, R): #R,G,B
     RED_C.ChangeDutyCycle(R) 
     GREEN_C.ChangeDutyCycle(G) 
-    BLUE_C.ChangeDutyCycle(B) 
- 
+    BLUE_C.ChangeDutyCycle(B)
+
 def send_update(message):
     print("Updated server with average:", message)
     publish.single(TOPIC, message, hostname=HOSTNAME)
@@ -53,7 +54,9 @@ def gpio_output(TRIG, ECHO):
     distance = round(distance, 2)
     return distance
 
-try:   
+try:
+    rtl_check = rlt_load()
+
     GPIO.setup(RED, GPIO.OUT)
     GPIO.setup(GREEN, GPIO.OUT)
     GPIO.setup(BLUE, GPIO.OUT)
