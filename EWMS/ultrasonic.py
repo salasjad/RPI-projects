@@ -1,6 +1,6 @@
 import RPi.GPIO as GPIO
 import paho.mqtt.publish as publish
-import paho.mqtt.client as subscribe
+import paho.mqtt.client as mqtt
 import time
 import collections
 import math
@@ -8,8 +8,11 @@ import threading
 
 GPIO.setmode(GPIO.BCM)
     
-TOPIC = "ewms/1"
+TOPIC = "ewms/container/1"
+#HOSTNAME = "mqtt.item.ntnu.no"
 HOSTNAME = "10.0.0.129"
+
+TOPIC1 = "ewms/request/1"
 
 #ULTRASONIC
 TRIG1 = 23 #gul
@@ -55,14 +58,27 @@ def gpio_output(TRIG, ECHO):
     distance = round(distance, 2)
     return distance
 
-def rtl():
-    while True:
+def on_connect(client, userdata, flags, rc):
+    print("Connected with result code "+str(rc))
+    client.subscribe("ewms/request/#")
+
+# The callback for when a PUBLISH message is received from the server.
+def on_message(client, userdata, msg):
+    print(msg.topic+" "+str(msg.payload)) 
+    message = str(msg.payload)
+    if message:
         sensor1 = gpio_output(TRIG1, ECHO1)
 	sensor2 = gpio_output(TRIG2, ECHO2)
-	sensor = min(sensor1, sensor2)
-	#add a payload for subscriber here
-        print('RTL', sensor)
-        time.sleep(1)
+	sensor = min(sensor1, sensor2) 
+        publish.single(TOPIC1, sensor, hostname=HOSTNAME)  
+
+def rtl():
+    while True:
+	client = mqtt.Client()
+	client.on_connect = on_connect
+	client.on_message = on_message
+	client.connect("localhost")
+        client.loop_forever() 
 
 try:
 
